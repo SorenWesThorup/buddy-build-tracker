@@ -1,0 +1,79 @@
+[
+  {
+    "Date": 1757980800000,
+    "Component": "CPU/APU: Ryzen 5 5600G",
+    "Model": "Ryzen 5 5600G (tray, no cooler)",
+    "Store": "Proshop",
+    "Price_DKK": 820,
+    "Shipping_DKK": 39,
+    "Total_DKK": 859,
+    "URL": "https://www.proshop.dk/CPU/AMD-Ryzen-5-5600G-CPU-APU-37-GHz-AMD-AM4-6-kerner-12-Traade-35-MB-Cache/3118480",
+    "Notes": "Under target, tray version"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "Motherboard: B550 mATX (M.2 + HDMI)",
+    "Model": "Gigabyte B550M-K",
+    "Store": "Proshop",
+    "Price_DKK": 606,
+    "Shipping_DKK": 39,
+    "Total_DKK": 645,
+    "URL": "https://www.proshop.dk/Bundkort/Gigabyte-B550M-K-Bundkort-AMD-B550-AMD-AM4-socket-DDR4-SDRAM-micro-ATX/3194409",
+    "Notes": "Strong deal, -24%"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "RAM: 16GB (2x8) DDR4-3200 CL16",
+    "Model": "G.Skill Ripjaws V CL16",
+    "Store": "Computersalg",
+    "Price_DKK": 334,
+    "Shipping_DKK": 39,
+    "Total_DKK": 373,
+    "URL": "https://www.computersalg.dk/i/7793139/g-skill-ripjaws-v-ddr4-3200mhz-16gb-2x8gb-cl16",
+    "Notes": "Strong deal, -26%"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "SSD: 1TB NVMe",
+    "Model": "Kingston NV3 1TB PCIe 4.0",
+    "Store": "Proshop",
+    "Price_DKK": 419,
+    "Shipping_DKK": 39,
+    "Total_DKK": 458,
+    "URL": "https://www.proshop.dk/SSD/Kingston-NV3-SSD-1TB-M2-2280-PCI-Express-40-x4-NVMe/3206176",
+    "Notes": "Strong deal, -17%"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "PSU: 650W 80+ Gold (semi-modular)",
+    "Model": "Seasonic G12 GM-650 (DEMO)",
+    "Store": "Proshop",
+    "Price_DKK": 577,
+    "Shipping_DKK": 39,
+    "Total_DKK": 616,
+    "URL": "https://www.proshop.dk/Strømforsyning/Seasonic-G12-GM-650-Strømforsyning-650-watt-120-mm-80-Plus-Gold-certificeret/3006058",
+    "Notes": "Strong deal, -27.5% demo item"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "Case: DUTZO C830 Panorama ARGB",
+    "Model": "DUTZO C321 Mesh TG ARGB",
+    "Store": "Proshop",
+    "Price_DKK": 499,
+    "Shipping_DKK": 39,
+    "Total_DKK": 538,
+    "URL": "https://www.proshop.dk/Kabinet/DUTZO-C321-Mesh-TG-ARGB-Mid-Tower-Tower-ATX-Kabinet-Gennemsigtig/3185680",
+    "Notes": "Alternative case within 500-600 DKK"
+  },
+  {
+    "Date": 1757980800000,
+    "Component": "Wi‑Fi: TP‑Link Archer T3U / T3U Plus",
+    "Model": "TP-Link Archer T3U Nano",
+    "Store": "Proshop",
+    "Price_DKK": 107,
+    "Shipping_DKK": 39,
+    "Total_DKK": 146,
+    "URL": "https://www.proshop.dk/Netvaerksadapter/TP-Link-Archer-T3U-Nano-Network-adapter-USB-20/2804974",
+    "Notes": "Cheap and meets need"
+  }
+]
