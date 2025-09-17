@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Gamepad2, Monitor, Zap, Eye, Star, Target } from "lucide-react";
 import { Link } from "react-router-dom";
-import fishtankPc from "@/assets/fishtank-pc.png";
 
 const Home = () => {
   return (
@@ -176,7 +175,7 @@ const Home = () => {
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-primary rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
             <img 
-              src={fishtankPc} 
+              src="/fishtank-pc.png" 
               alt="Gaming PC i fishtank design med RGB LED blæsere og vandkøling" 
               className="relative rounded-3xl shadow-elegant w-full object-cover aspect-square transform group-hover:scale-105 transition-transform duration-500"
             />
