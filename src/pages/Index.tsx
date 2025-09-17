@@ -2,7 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingDown, TrendingUp, Cpu, HardDrive, Zap, Wifi, Home, Gamepad2, Monitor, ExternalLink } from "lucide-react";
+import { TrendingDown, TrendingUp, Cpu, HardDrive, Zap, Wifi, Home, Gamepad2, Monitor, ExternalLink, MemoryStick, HardDriveIcon, PcCase, Router } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -197,26 +198,205 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="components">
-            <Card className="bg-gradient-card border-primary/20 shadow-card">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Cpu className="h-5 w-5 text-primary" />
-                  <span>Komponenter & Priser</span>
-                </CardTitle>
-                <p className="text-muted-foreground">Administrer komponenter og modtag pris alerts</p>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12">
-                  <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-4 animate-pulse-glow">
-                    <Cpu className="h-8 w-8 text-primary-foreground" />
+            <div className="space-y-6">
+              {/* Components Price Table */}
+              <Card className="bg-gradient-card border-primary/20 shadow-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Cpu className="h-5 w-5 text-primary" />
+                    <span>Komponenter & Priser</span>
+                  </CardTitle>
+                  <p className="text-muted-foreground">Aktuelle priser på alle komponenter til gaming PC'en</p>
+                </CardHeader>
+                <CardContent>
+                  {isLoading ? (
+                    <div className="text-center py-8">
+                      <div className="animate-pulse">Indlæser komponenter...</div>
+                    </div>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="border-primary/20">
+                            <TableHead className="text-primary">Komponent</TableHead>
+                            <TableHead className="text-primary">Model</TableHead>
+                            <TableHead className="text-primary">Butik</TableHead>
+                            <TableHead className="text-primary text-right">Pris</TableHead>
+                            <TableHead className="text-primary text-right">Fragt</TableHead>
+                            <TableHead className="text-primary text-right">Total</TableHead>
+                            <TableHead className="text-primary text-right">Target</TableHead>
+                            <TableHead className="text-primary text-center">Status</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {components.map((comp, index) => {
+                            const isUnderTarget = comp.Vs_Target_DKK < 0;
+                            const getIcon = (component) => {
+                              if (component.includes('CPU')) return Cpu;
+                              if (component.includes('Motherboard')) return Monitor;
+                              if (component.includes('RAM')) return MemoryStick;
+                              if (component.includes('SSD')) return HardDriveIcon;
+                              if (component.includes('PSU')) return Zap;
+                              if (component.includes('Case')) return PcCase;
+                              if (component.includes('Wi-Fi')) return Router;
+                              return Cpu;
+                            };
+                            const IconComponent = getIcon(comp.Component);
+                            
+                            return (
+                              <TableRow key={index} className="border-primary/10 hover:bg-primary/5 transition-colors">
+                                <TableCell className="font-medium">
+                                  <div className="flex items-center space-x-2">
+                                    <IconComponent className="h-4 w-4 text-primary" />
+                                    <span>{comp.Component}</span>
+                                  </div>
+                                </TableCell>
+                                <TableCell>
+                                  <div className="flex items-center space-x-2">
+                                    <span>{comp.Model}</span>
+                                    {comp.URL && (
+                                      <a href={comp.URL} target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
+                                        <ExternalLink className="h-3 w-3" />
+                                      </a>
+                                    )}
+                                  </div>
+                                </TableCell>
+                                <TableCell className="text-muted-foreground">{comp.Store}</TableCell>
+                                <TableCell className="text-right">{comp.Price_DKK} DKK</TableCell>
+                                <TableCell className="text-right">{comp.Shipping_DKK} DKK</TableCell>
+                                <TableCell className="text-right font-semibold">{comp.Total_DKK} DKK</TableCell>
+                                <TableCell className="text-right text-muted-foreground">{comp.Target_DKK} DKK</TableCell>
+                                <TableCell className="text-center">
+                                  {comp.Alert ? (
+                                    <Badge className="bg-green-600 animate-pulse-glow">
+                                      Tilbud! {comp.Vs_Target_DKK} DKK
+                                    </Badge>
+                                  ) : (
+                                    <Badge variant={isUnderTarget ? "default" : "secondary"} className={isUnderTarget ? "text-green-600" : ""}>
+                                      {comp.Vs_Target_DKK > 0 ? '+' : ''}{comp.Vs_Target_DKK} DKK
+                                    </Badge>
+                                  )}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Component Overview */}
+              <Card className="bg-gradient-card border-primary/20 shadow-card">
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Gamepad2 className="h-5 w-5 text-primary" />
+                    <span>Komponent Oversigt</span>
+                  </CardTitle>
+                  <p className="text-muted-foreground">Hvad hver komponent gør for din gaming oplevelse</p>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {/* CPU */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <Cpu className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">CPU/APU</h3>
+                          <p className="text-sm text-muted-foreground">Ryzen 5 5600G</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Hjerten i din PC. Ryzen 5 5600G har integreret grafik, perfekt til Minecraft og let Fortnite gaming. 6 kerner sikrer smooth multitasking.
+                      </p>
+                    </div>
+
+                    {/* Motherboard */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <Monitor className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">Motherboard</h3>
+                          <p className="text-sm text-muted-foreground">B550 mATX</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Forbinder alle komponenter. B550 chipset understøtter hurtige NVMe SSD'er og har HDMI output til dit display samt M.2 slot.
+                      </p>
+                    </div>
+
+                    {/* RAM */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <MemoryStick className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">RAM</h3>
+                          <p className="text-sm text-muted-foreground">16GB DDR4-3200</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Systemets hukommelse. 16GB er rigeligt til gaming og multitasking. DDR4-3200 giver god hastighed til Ryzen processoren.
+                      </p>
+                    </div>
+
+                    {/* SSD */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <HardDriveIcon className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">SSD</h3>
+                          <p className="text-sm text-muted-foreground">1TB NVMe</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Superfast lager. NVMe SSD sikrer lynhurtig bootning og loading af spil. 1TB er plads til Windows + mange spil.
+                      </p>
+                    </div>
+
+                    {/* PSU */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <Zap className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">PSU</h3>
+                          <p className="text-sm text-muted-foreground">650W 80+ Gold</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Strømforsyning. 650W er rigeligt til dit system. 80+ Gold certificering betyder høj energieffektivitet og lavere strømregning.
+                      </p>
+                    </div>
+
+                    {/* Case */}
+                    <div className="group p-6 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="p-3 rounded-full bg-gradient-primary">
+                          <PcCase className="h-6 w-6 text-primary-foreground" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg">Kabinet</h3>
+                          <p className="text-sm text-muted-foreground">DUTZO Fishtank RGB</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Dit gaming showcase! Transparent fishtank design med ARGB LED blæsere skaber det ultimative gaming æstetik til dit setup.
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    Komponent administration kommer snart...
-                  </p>
-                  <Badge className="bg-gradient-primary">Kommer snart</Badge>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           <TabsContent value="guides">
