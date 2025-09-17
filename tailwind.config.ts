@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -115,16 +116,16 @@ export default {
         "pulse-glow": "pulse-glow 2s ease-in-out infinite",
       },
       backgroundImage: {
-        'gradient-primary': 'var(--gradient-primary)',
-        'gradient-hero': 'var(--gradient-hero)',
-        'gradient-card': 'var(--gradient-card)',
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-hero": "var(--gradient-hero)",
+        "gradient-card": "var(--gradient-card)",
       },
       boxShadow: {
-        'glow': 'var(--shadow-glow)',
-        'card': 'var(--shadow-card)',
-        'elegant': 'var(--shadow-elegant)',
+        glow: "var(--shadow-glow)",
+        card: "var(--shadow-card)",
+        elegant: "var(--shadow-elegant)",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
