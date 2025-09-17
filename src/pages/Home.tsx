@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Gamepad2, Monitor, Zap, Eye, Star, Target } from "lucide-react";
 import { Link } from "react-router-dom";
+import fishtankPc from "@/assets/fishtank-pc.png";
 
 const Home = () => {
   return (
@@ -143,6 +144,45 @@ const Home = () => {
           </Card>
         </div>
 
+        {/* Fishtank PC Showcase */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
+          <div className="space-y-6">
+            <h2 className="text-4xl font-bold">
+              Det Ultimate{" "}
+              <span className="bg-gradient-primary bg-clip-text text-transparent">
+                Fishtank Setup
+              </span>
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Med gennemsigtigt kabinet og RGB LED blæsere får vi det fedeste gaming setup. 
+              Som et akvararium fyldt med high-tech komponenter - perfekt til at imponere venner 
+              og få den ultimative gaming-oplevelse!
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                <span>Vandkøling og RGB effekter</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{animationDelay: "0.5s"}}></div>
+                <span>Gennemsigtigt kabinet design</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{animationDelay: "1s"}}></div>
+                <span>LED blæsere for optimal køling</span>
+              </div>
+            </div>
+          </div>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-gradient-primary rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+            <img 
+              src={fishtankPc} 
+              alt="Gaming PC i fishtank design med RGB LED blæsere og vandkøling" 
+              className="relative rounded-3xl shadow-elegant w-full object-cover aspect-square transform group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+        </div>
+
         {/* Call to Action */}
         <div className="text-center space-y-6">
           <div className="bg-gradient-card border border-primary/20 rounded-2xl p-8 shadow-elegant">
@@ -157,16 +197,16 @@ const Home = () => {
             </p>
             <div className="grid sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
               <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-primary">8</div>
+                <div className="text-3xl font-bold text-primary">7</div>
                 <div className="text-sm text-muted-foreground">Komponenter</div>
               </div>
               <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-primary">4.500</div>
+                <div className="text-3xl font-bold text-primary">4.549</div>
                 <div className="text-sm text-muted-foreground">DKK Budget</div>
               </div>
               <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-primary">∞</div>
-                <div className="text-sm text-muted-foreground">Gaming Fun</div>
+                <div className="text-3xl font-bold text-primary">3.589</div>
+                <div className="text-sm text-muted-foreground">DKK Aktuel</div>
               </div>
             </div>
           </div>
