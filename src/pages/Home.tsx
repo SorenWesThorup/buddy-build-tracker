@@ -3,15 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Gamepad2, Monitor, Zap, Eye, Star, Target } from "lucide-react";
 import { Link } from "react-router-dom";
-import fishtankPc from "@/assets/fishtank-pc.png";
-
 const Home = () => {
-  return (
-    <div className="min-h-screen bg-gradient-hero relative overflow-hidden">
+  return <div className="min-h-screen bg-gradient-hero relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{animationDelay: "2s"}}></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-float" style={{
+        animationDelay: "2s"
+      }}></div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary-glow/5 rounded-full blur-3xl animate-glow"></div>
       </div>
 
@@ -24,9 +23,7 @@ const Home = () => {
                 <Gamepad2 className="h-8 w-8 text-primary animate-pulse-glow" />
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
               </div>
-              <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Gaming PC Builder
-              </h1>
+              <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">Gaming PC Builder</h1>
             </div>
             <Link to="/dashboard">
               <Button className="bg-gradient-primary shadow-glow hover:shadow-elegant transition-all duration-300">
@@ -51,10 +48,7 @@ const Home = () => {
                 Gamer PC
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Følg med i vores rejse hvor vi bygger en fed gamer PC til Minecraft og Fortnite. 
-              Med RGB LED blæsere og et gennemsigtigt fishtank kabinet der lyser op som en ægte gaming-rig!
-            </p>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">Følg med i vores mega seje rejse hvor vi bygger en fed gamer PC til Minecraft og Fortnite. Med RGB LED blæsere og et gennemsigtigt fishtank kabinet der lyser op som en ægte gaming-rig!</p>
           </div>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -75,8 +69,8 @@ const Home = () => {
         <div className="grid md:grid-cols-3 gap-8 mb-16">
           <Card className="bg-gradient-card border-primary/20 shadow-card hover:shadow-elegant transition-all duration-300 hover:scale-105 group">
             <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse-glow">
-                <Gamepad2 className="h-8 w-8 text-primary-foreground" />
+              <div className="mx-auto w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mb-4 group-hover:animate-pulse-glow bg-fuchsia-800">
+                <Gamepad2 className="h-8 w-8 text-primary-foreground rounded-2xl" />
               </div>
               <CardTitle className="text-primary">Gaming Performance</CardTitle>
             </CardHeader>
@@ -111,8 +105,12 @@ const Home = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-center space-x-2">
                   <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" style={{animationDelay: "0.5s"}}></div>
-                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{animationDelay: "1s"}}></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" style={{
+                  animationDelay: "0.5s"
+                }}></div>
+                  <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style={{
+                  animationDelay: "1s"
+                }}></div>
                   <span className="text-sm">RGB Effekter</span>
                 </div>
               </div>
@@ -149,7 +147,7 @@ const Home = () => {
           <div className="space-y-6">
             <h2 className="text-4xl font-bold">
               Det Ultimate{" "}
-              <span className="bg-gradient-primary bg-clip-text text-transparent">
+              <span className="bg-gradient-primary bg-clip-text text-rose-500">
                 Fishtank Setup
               </span>
             </h2>
@@ -164,22 +162,22 @@ const Home = () => {
                 <span>Vandkøling og RGB effekter</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{animationDelay: "0.5s"}}></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{
+                animationDelay: "0.5s"
+              }}></div>
                 <span>Gennemsigtigt kabinet design</span>
               </div>
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{animationDelay: "1s"}}></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" style={{
+                animationDelay: "1s"
+              }}></div>
                 <span>LED blæsere for optimal køling</span>
               </div>
             </div>
           </div>
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-primary rounded-3xl blur-2xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
-            <img 
-              src={fishtankPc} 
-              alt="Gaming PC i fishtank design med RGB LED blæsere og vandkøling" 
-              className="relative rounded-3xl shadow-elegant w-full object-cover aspect-square transform group-hover:scale-105 transition-transform duration-500"
-            />
+            <img src="/fishtank-pc.png" alt="Gaming PC i fishtank design med RGB LED blæsere og vandkøling" className="relative rounded-3xl shadow-elegant w-full object-cover aspect-square transform group-hover:scale-105 transition-transform duration-500" />
           </div>
         </div>
 
@@ -212,8 +210,6 @@ const Home = () => {
           </div>
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Home;
