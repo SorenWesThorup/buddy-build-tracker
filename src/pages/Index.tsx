@@ -65,12 +65,14 @@ const Index = () => {
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-gradient-card border border-primary/20">
+          <div className="grid w-full grid-cols-4 bg-gradient-card border border-primary/20 rounded-lg p-1">
             <TabsTrigger value="dashboard" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Dashboard</TabsTrigger>
             <TabsTrigger value="components" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Komponenter</TabsTrigger>
-            <TabsTrigger value="guides" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Byggevejledning</TabsTrigger>
+            <Link to="/byggevejledning" className="flex items-center justify-center h-10 px-3 py-2 text-sm font-medium transition-all hover:bg-primary/10 rounded-md">
+              Byggevejledning
+            </Link>
             <TabsTrigger value="gallery" className="data-[state=active]:bg-gradient-primary data-[state=active]:text-primary-foreground">Vores Byg</TabsTrigger>
-          </TabsList>
+          </div>
 
           <TabsContent value="dashboard" className="space-y-6">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
