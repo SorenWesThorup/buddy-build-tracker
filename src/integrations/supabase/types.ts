@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      components: {
+        Row: {
+          alert: string | null
+          component: string
+          created_at: string
+          date: string
+          id: string
+          model: string
+          notes: string | null
+          price_dkk: number
+          shipping_dkk: number
+          store: string
+          target_dkk: number
+          total_dkk: number
+          updated_at: string
+          url: string | null
+          vs_target_dkk: number
+          vs_target_percent: number | null
+        }
+        Insert: {
+          alert?: string | null
+          component: string
+          created_at?: string
+          date?: string
+          id?: string
+          model: string
+          notes?: string | null
+          price_dkk: number
+          shipping_dkk?: number
+          store: string
+          target_dkk: number
+          total_dkk: number
+          updated_at?: string
+          url?: string | null
+          vs_target_dkk: number
+          vs_target_percent?: number | null
+        }
+        Update: {
+          alert?: string | null
+          component?: string
+          created_at?: string
+          date?: string
+          id?: string
+          model?: string
+          notes?: string | null
+          price_dkk?: number
+          shipping_dkk?: number
+          store?: string
+          target_dkk?: number
+          total_dkk?: number
+          updated_at?: string
+          url?: string | null
+          vs_target_dkk?: number
+          vs_target_percent?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
