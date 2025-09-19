@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertCircle, Wrench, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckCircle, AlertCircle, Wrench, Zap, Monitor, Home } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const BuildGuide = () => {
   const buildSteps = [
@@ -95,8 +97,37 @@ const BuildGuide = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-hero relative">
+      {/* Animated background */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute top-10 right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute bottom-32 left-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{animationDelay: "3s"}}></div>
+      </div>
+
+      <header className="border-b border-primary/20 backdrop-blur-sm bg-background/80">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="relative">
+                <Monitor className="h-8 w-8 text-primary animate-pulse-glow" />
+                <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">PC Byggevejledning</h1>
+                <p className="text-muted-foreground text-sm">Trin for trin guide til dit gaming setup</p>
+              </div>
+            </div>
+            <Link to="/dashboard">
+              <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
+                <Home className="mr-2 h-4 w-4" />
+                Tilbage til Dashboard
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent mb-4">
@@ -169,7 +200,7 @@ const BuildGuide = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </main>
     </div>
   );
 };

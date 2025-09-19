@@ -5,32 +5,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingDown, TrendingUp, Cpu, HardDrive, Zap, Wifi, Home, Gamepad2, Monitor, ExternalLink, MemoryStick, HardDriveIcon, PcCase, Router } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useComponents } from "@/hooks/useComponents";
 
 const Index = () => {
-  const [components, setComponents] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { components, isLoading, error } = useComponents();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/data/latest-prices.json');
-        const data = await response.json();
-        setComponents(data);
-      } catch (error) {
-        console.error('Error loading component data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    fetchData();
-  }, []);
-
-  const totalCurrent = components.reduce((sum, comp) => sum + (comp.Total_DKK || 0), 0);
-  const totalTarget = components.reduce((sum, comp) => sum + (comp.Target_DKK || 0), 0);
+  const totalCurrent = components.reduce((sum, comp) => sum + (comp.total_dkk || 0), 0);
+  const totalTarget = components.reduce((sum, comp) => sum + (comp.target_dkk || 0), 0);
   const savings = totalTarget - totalCurrent;
-  const alertComponents = components.filter(comp => comp.Alert);
+  const alertComponents = components.filter(comp => comp.alert);
 
   return (
     <div className="min-h-screen bg-gradient-hero relative">
@@ -138,25 +121,29 @@ const Index = () => {
               </CardHeader>
                <CardContent>
                  {isLoading ? (
-                   <div className="text-center py-8">
-                     <div className="animate-pulse">Indlæser prisdata...</div>
-                   </div>
-                 ) : (
+                    <div className="text-center py-8">
+                      <div className="animate-pulse">Indlæser prisdata...</div>
+                    </div>
+                  ) : error ? (
+                    <div className="text-center py-8">
+                      <div className="text-red-500">Fejl: {error}</div>
+                    </div>
+                  ) : (
                    <div className="space-y-4">
-                     {components.slice(0, 4).map((comp, index) => {
-                       const getIcon = (component) => {
-                         if (component.includes('CPU')) return Cpu;
-                         if (component.includes('Motherboard')) return Monitor;
-                         if (component.includes('RAM')) return HardDrive;
-                         if (component.includes('SSD')) return HardDrive;
-                         if (component.includes('PSU')) return Zap;
-                         if (component.includes('Case')) return Monitor;
-                         if (component.includes('Wi-Fi')) return Wifi;
-                         return Cpu;
-                       };
-                       
-                       const IconComponent = getIcon(comp.Component);
-                       const isUnderTarget = comp.Vs_Target_DKK < 0;
+                      {components.slice(0, 4).map((comp, index) => {
+                        const getIcon = (component) => {
+                          if (component?.includes('CPU')) return Cpu;
+                          if (component?.includes('Motherboard')) return Monitor;
+                          if (component?.includes('RAM')) return HardDrive;
+                          if (component?.includes('SSD')) return HardDrive;
+                          if (component?.includes('PSU')) return Zap;
+                          if (component?.includes('Case')) return Monitor;
+                          if (component?.includes('Wi-Fi')) return Wifi;
+                          return Cpu;
+                        };
+                        
+                        const IconComponent = getIcon(comp.component);
+                        const isUnderTarget = (comp.vs_target_dkk || 0) < 0;
                        
                        return (
                          <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-primary/20 bg-gradient-card hover:shadow-glow transition-all duration-300 group">
@@ -164,31 +151,31 @@ const Index = () => {
                              <div className="p-2 rounded-full bg-gradient-primary">
                                <IconComponent className="h-5 w-5 text-primary-foreground" />
                              </div>
-                             <div className="flex-1">
-                               <p className="font-medium">{comp.Model}</p>
-                               <p className="text-sm text-muted-foreground flex items-center">
-                                 {comp.Store}
-                                 {comp.URL && (
-                                   <a href={comp.URL} target="_blank" rel="noopener noreferrer" className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                     <ExternalLink className="h-3 w-3" />
-                                   </a>
-                                 )}
-                               </p>
-                             </div>
-                           </div>
-                           <div className="text-right">
-                             <p className={`font-bold ${isUnderTarget ? 'text-green-600' : 'text-primary'}`}>
-                               {comp.Total_DKK} DKK
-                             </p>
-                             {comp.Alert ? (
-                               <Badge className="bg-green-600 animate-pulse-glow">
-                                 {comp.Vs_Target_DKK} DKK
-                               </Badge>
-                             ) : (
-                               <Badge variant="secondary" className={isUnderTarget ? "text-green-600" : ""}>
-                                 {comp.Vs_Target_DKK > 0 ? '+' : ''}{comp.Vs_Target_DKK} DKK
-                               </Badge>
-                             )}
+                              <div className="flex-1">
+                                <p className="font-medium">{comp.model}</p>
+                                <p className="text-sm text-muted-foreground flex items-center">
+                                  {comp.store}
+                                  {comp.url && (
+                                    <a href={comp.url} target="_blank" rel="noopener noreferrer" className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <ExternalLink className="h-3 w-3" />
+                                    </a>
+                                  )}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className={`font-bold ${isUnderTarget ? 'text-green-600' : 'text-primary'}`}>
+                                {comp.total_dkk} DKK
+                              </p>
+                              {comp.alert ? (
+                                <Badge className="bg-green-600 animate-pulse-glow">
+                                  {comp.vs_target_dkk} DKK
+                                </Badge>
+                              ) : (
+                                <Badge variant="secondary" className={isUnderTarget ? "text-green-600" : ""}>
+                                  {(comp.vs_target_dkk || 0) > 0 ? '+' : ''}{comp.vs_target_dkk} DKK
+                                </Badge>
+                              )}
                            </div>
                          </div>
                        );
@@ -211,11 +198,15 @@ const Index = () => {
                   <p className="text-muted-foreground">Aktuelle priser på alle komponenter til gaming PC'en</p>
                 </CardHeader>
                 <CardContent>
-                  {isLoading ? (
-                    <div className="text-center py-8">
-                      <div className="animate-pulse">Indlæser komponenter...</div>
-                    </div>
-                  ) : (
+                   {isLoading ? (
+                     <div className="text-center py-8">
+                       <div className="animate-pulse">Indlæser komponenter...</div>
+                     </div>
+                   ) : error ? (
+                     <div className="text-center py-8">
+                       <div className="text-red-500">Fejl: {error}</div>
+                     </div>
+                   ) : (
                     <div className="overflow-x-auto">
                       <Table>
                         <TableHeader>
@@ -231,54 +222,54 @@ const Index = () => {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {components.map((comp, index) => {
-                            const isUnderTarget = comp.Vs_Target_DKK < 0;
-                            const getIcon = (component) => {
-                              if (component.includes('CPU')) return Cpu;
-                              if (component.includes('Motherboard')) return Monitor;
-                              if (component.includes('RAM')) return MemoryStick;
-                              if (component.includes('SSD')) return HardDriveIcon;
-                              if (component.includes('PSU')) return Zap;
-                              if (component.includes('Case')) return PcCase;
-                              if (component.includes('Wi-Fi')) return Router;
-                              return Cpu;
-                            };
-                            const IconComponent = getIcon(comp.Component);
+                           {components.map((comp, index) => {
+                             const isUnderTarget = (comp.vs_target_dkk || 0) < 0;
+                             const getIcon = (component) => {
+                               if (component?.includes('CPU')) return Cpu;
+                               if (component?.includes('Motherboard')) return Monitor;
+                               if (component?.includes('RAM')) return MemoryStick;
+                               if (component?.includes('SSD')) return HardDriveIcon;
+                               if (component?.includes('PSU')) return Zap;
+                               if (component?.includes('Case')) return PcCase;
+                               if (component?.includes('Wi-Fi')) return Router;
+                               return Cpu;
+                             };
+                             const IconComponent = getIcon(comp.component);
                             
                             return (
                               <TableRow key={index} className="border-primary/10 hover:bg-primary/5 transition-colors">
-                                <TableCell className="font-medium">
-                                  <div className="flex items-center space-x-2">
-                                    <IconComponent className="h-4 w-4 text-primary" />
-                                    <span>{comp.Component}</span>
-                                  </div>
-                                </TableCell>
-                                <TableCell>
-                                  <div className="flex items-center space-x-2">
-                                    <span>{comp.Model}</span>
-                                    {comp.URL && (
-                                      <a href={comp.URL} target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
-                                        <ExternalLink className="h-3 w-3" />
-                                      </a>
-                                    )}
-                                  </div>
-                                </TableCell>
-                                <TableCell className="text-muted-foreground">{comp.Store}</TableCell>
-                                <TableCell className="text-right">{comp.Price_DKK} DKK</TableCell>
-                                <TableCell className="text-right">{comp.Shipping_DKK} DKK</TableCell>
-                                <TableCell className="text-right font-semibold">{comp.Total_DKK} DKK</TableCell>
-                                <TableCell className="text-right text-muted-foreground">{comp.Target_DKK} DKK</TableCell>
-                                <TableCell className="text-center">
-                                  {comp.Alert ? (
-                                    <Badge className="bg-green-600 animate-pulse-glow">
-                                      Tilbud! {comp.Vs_Target_DKK} DKK
-                                    </Badge>
-                                  ) : (
-                                    <Badge variant={isUnderTarget ? "default" : "secondary"} className={isUnderTarget ? "text-green-600" : ""}>
-                                      {comp.Vs_Target_DKK > 0 ? '+' : ''}{comp.Vs_Target_DKK} DKK
-                                    </Badge>
-                                  )}
-                                </TableCell>
+                                 <TableCell className="font-medium">
+                                   <div className="flex items-center space-x-2">
+                                     <IconComponent className="h-4 w-4 text-primary" />
+                                     <span>{comp.component}</span>
+                                   </div>
+                                 </TableCell>
+                                 <TableCell>
+                                   <div className="flex items-center space-x-2">
+                                     <span>{comp.model}</span>
+                                     {comp.url && (
+                                       <a href={comp.url} target="_blank" rel="noopener noreferrer" className="opacity-60 hover:opacity-100 transition-opacity">
+                                         <ExternalLink className="h-3 w-3" />
+                                       </a>
+                                     )}
+                                   </div>
+                                 </TableCell>
+                                 <TableCell className="text-muted-foreground">{comp.store}</TableCell>
+                                 <TableCell className="text-right">{comp.price_dkk} DKK</TableCell>
+                                 <TableCell className="text-right">{comp.shipping_dkk} DKK</TableCell>
+                                 <TableCell className="text-right font-semibold">{comp.total_dkk} DKK</TableCell>
+                                 <TableCell className="text-right text-muted-foreground">{comp.target_dkk} DKK</TableCell>
+                                 <TableCell className="text-center">
+                                   {comp.alert ? (
+                                     <Badge className="bg-green-600 animate-pulse-glow">
+                                       Tilbud! {comp.vs_target_dkk} DKK
+                                     </Badge>
+                                   ) : (
+                                     <Badge variant={isUnderTarget ? "default" : "secondary"} className={isUnderTarget ? "text-green-600" : ""}>
+                                       {(comp.vs_target_dkk || 0) > 0 ? '+' : ''}{comp.vs_target_dkk} DKK
+                                     </Badge>
+                                   )}
+                                 </TableCell>
                               </TableRow>
                             );
                           })}
