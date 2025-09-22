@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import type { Database } from '@/integrations/supabase/types';
 
 type Component = Database['public']['Tables']['components']['Row'];
+type ComponentInsert = Database['public']['Tables']['components']['Insert'];
 
 export const useComponents = () => {
   const [components, setComponents] = useState<Component[]>([]);
@@ -14,6 +15,7 @@ export const useComponents = () => {
       setIsLoading(true);
       setError(null);
       
+      // No authentication required - public access
       const { data, error: supabaseError } = await supabase
         .from('components')
         .select('*')
@@ -32,6 +34,24 @@ export const useComponents = () => {
     }
   };
 
+  const addComponent = async (componentData: ComponentInsert) => {
+    try {
+      const { data, error } = await supabase
+        .from('components')
+        .insert([componentData])
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      await fetchComponents(); // Refresh the list
+      return data;
+    } catch (err) {
+      console.error('Error adding component:', err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchComponents();
   }, []);
@@ -40,6 +60,7 @@ export const useComponents = () => {
     components,
     isLoading,
     error,
-    refetch: fetchComponents
+    refetch: fetchComponents,
+    addComponent
   };
 };

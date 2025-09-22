@@ -2,14 +2,15 @@
 
 ## Base URL
 ```
-https://[your-supabase-project].supabase.co/functions/v1/pc-price-api
+https://dydosyheairmgbxdlnpk.supabase.co/functions/v1/pc-price-api
 ```
 
 ## Authentication
-All requests require a Supabase API key in the header:
+**PUBLIC ACCESS**: No authentication required. All endpoints are publicly accessible.
+
+Headers for requests:
 ```
-Authorization: Bearer [your-supabase-anon-key]
-apikey: [your-supabase-anon-key]
+Content-Type: application/json
 ```
 
 ## Endpoints
@@ -22,12 +23,13 @@ Add a new price observation for a component.
 #### Request Body
 ```json
 {
-  "component_id": "uuid",
   "date": "2024-01-15",
   "model": "RTX 4070 Super Gaming X Trio",
   "store": "Proshop",
   "price_dkk": 5299,
   "shipping_dkk": 39,
+  "component": "Grafikkort",
+  "target_dkk": 5000,
   "url": "https://www.proshop.dk/...",
   "notes": "Special offer"
 }
@@ -35,103 +37,116 @@ Add a new price observation for a component.
 
 #### Response
 ```json
-[
-  {
-    "id": "uuid",
-    "component_id": "uuid",
-    "date": "2024-01-15",
-    "model": "RTX 4070 Super Gaming X Trio",
-    "store": "Proshop",
-    "price_dkk": 5299,
-    "shipping_dkk": 39,
-    "total_dkk": 5338,
-    "url": "https://www.proshop.dk/...",
-    "notes": "Special offer",
-    "created_at": "2024-01-15T10:30:00Z"
-  }
-]
+{
+  "id": "uuid",
+  "date": "2024-01-15",
+  "model": "RTX 4070 Super Gaming X Trio",
+  "store": "Proshop",
+  "price_dkk": 5299,
+  "shipping_dkk": 39,
+  "total_dkk": 5338,
+  "component": "Grafikkort",
+  "target_dkk": 5000,
+  "vs_target_dkk": 338,
+  "vs_target_percent": 0.0676,
+  "url": "https://www.proshop.dk/...",
+  "notes": "Special offer",
+  "alert": null,
+  "created_at": "2024-01-15T10:30:00Z"
+}
 ```
 
-### 2. Get All Components with Latest Prices
+### 2. Get All Components
 **GET** `/components`
 
-Retrieve all components with their most recent price entries.
+Retrieve all components with their pricing data.
 
 #### Response
 ```json
 [
   {
     "id": "uuid",
-    "category": "Grafikkort",
-    "name": "RTX 4070 Super",
-    "target_price_dkk": 5000,
-    "alert_threshold_dkk": 4800,
-    "is_alternative": false,
-    "created_at": "2024-01-01T00:00:00Z",
-    "price_entries": [
-      {
-        "date": "2024-01-15",
-        "model": "RTX 4070 Super Gaming X Trio",
-        "store": "Proshop",
-        "price_dkk": 5299,
-        "shipping_dkk": 39,
-        "total_dkk": 5338,
-        "url": "https://www.proshop.dk/...",
-        "notes": "Special offer"
-      }
-    ]
+    "date": "2024-01-15",
+    "component": "Grafikkort",
+    "model": "RTX 4070 Super Gaming X Trio",
+    "store": "Proshop",
+    "price_dkk": 5299,
+    "shipping_dkk": 39,
+    "total_dkk": 5338,
+    "target_dkk": 5000,
+    "vs_target_dkk": 338,
+    "vs_target_percent": 0.0676,
+    "url": "https://www.proshop.dk/...",
+    "notes": "Special offer",
+    "alert": null,
+    "created_at": "2024-01-15T10:30:00Z"
   }
 ]
 ```
 
-### 3. Add New Component
-**POST** `/components`
+### 3. Direct Supabase Access
+You can also interact directly with the Supabase database using the JavaScript client:
 
-Add a new component to track.
+#### Supabase Configuration
+```javascript
+import { createClient } from '@supabase/supabase-js';
 
-#### Request Body
-```json
-{
-  "category": "Grafikkort",
-  "name": "RTX 4070 Super",
-  "target_price_dkk": 5000,
-  "alert_threshold_dkk": 4800,
-  "is_alternative": false
-}
+const supabaseUrl = 'https://dydosyheairmgbxdlnpk.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5ZG9zeWhlYWlybWdieGRsbnBrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxOTM4NDgsImV4cCI6MjA3Mzc2OTg0OH0.X7MIKy41XnYlQ90o1_1LuLTO54MR4DQJ1WD4-HbDm68';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
 ```
 
-### 4. Get Price History
-**GET** `/price-history/{component_id}`
+#### Insert Component Data
+```javascript
+const { data, error } = await supabase
+  .from('components')
+  .insert([
+    {
+      date: '2024-01-15',
+      component: 'Grafikkort',
+      model: 'RTX 4070 Super Gaming X Trio',
+      store: 'Proshop',
+      price_dkk: 5299,
+      shipping_dkk: 39,
+      target_dkk: 5000,
+      url: 'https://www.proshop.dk/...',
+      notes: 'Special offer'
+    }
+  ])
+  .select();
+```
 
-Get all price entries for a specific component.
+#### Query Component Data
+```javascript
+const { data, error } = await supabase
+  .from('components')
+  .select('*')
+  .order('created_at', { ascending: false });
+```
 
-### 5. Get Price Alerts
-**GET** `/alerts`
-
-Get components that are currently under their alert threshold.
-
-## Example ChatGPT Agent Usage
+## ChatGPT Integration Examples
 
 ### Daily Price Update Script
 ```javascript
 // Example of how a ChatGPT agent could send daily price updates
 
 const priceData = {
-  component_id: "your-component-uuid",
   date: "2024-01-15",
+  component: "Grafikkort",
   model: "RTX 4070 Super Gaming X Trio",
   store: "Proshop", 
-  price_dkk: 5299,
+  price_dkr: 5299,
   shipping_dkk: 39,
+  target_dkk: 5000,
   url: "https://www.proshop.dk/grafikkort/...",
   notes: "Normal price"
 };
 
-const response = await fetch('https://your-project.supabase.co/functions/v1/pc-price-api/price-entry', {
+// Using the edge function
+const response = await fetch('https://dydosyheairmgbxdlnpk.supabase.co/functions/v1/pc-price-api/price-entry', {
   method: 'POST',
   headers: {
-    'Authorization': 'Bearer your-supabase-anon-key',
-    'apikey': 'your-supabase-anon-key',
     'Content-Type': 'application/json'
   },
   body: JSON.stringify(priceData)
@@ -139,6 +154,37 @@ const response = await fetch('https://your-project.supabase.co/functions/v1/pc-p
 
 const result = await response.json();
 console.log('Price added:', result);
+```
+
+### Using Supabase Directly (Recommended)
+```javascript
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  'https://dydosyheairmgbxdlnpk.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5ZG9zeWhlYWlybWdieGRsbnBrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxOTM4NDgsImV4cCI6MjA3Mzc2OTg0OH0.X7MIKy41XnYlQ90o1_1LuLTO54MR4DQJ1WD4-HbDm68'
+);
+
+// Add price data
+const { data, error } = await supabase
+  .from('components')
+  .insert([{
+    date: '2024-01-15',
+    component: 'Grafikkort',
+    model: 'RTX 4070 Super Gaming X Trio',
+    store: 'Proshop',
+    price_dkk: 5299,
+    shipping_dkk: 39,
+    target_dkk: 5000,
+    url: 'https://www.proshop.dk/...',
+    notes: 'Special offer'
+  }]);
+
+if (error) {
+  console.error('Error:', error);
+} else {
+  console.log('Data inserted:', data);
+}
 ```
 
 ## Component Categories
@@ -160,6 +206,33 @@ console.log('Price added:', result);
 - Amazon
 - Newegg
 
+## Database Schema
+
+### Components Table Columns
+- `id` (UUID, auto-generated)
+- `date` (DATE) - Price observation date
+- `component` (TEXT) - Component category
+- `model` (TEXT) - Specific model name
+- `store` (TEXT) - Store name
+- `price_dkk` (INTEGER) - Base price in DKK
+- `shipping_dkk` (INTEGER) - Shipping cost in DKK (default: 0)
+- `total_dkk` (INTEGER) - Calculated total (price + shipping)
+- `target_dkk` (INTEGER) - Target price for this component
+- `vs_target_dkk` (INTEGER) - Difference from target (calculated)
+- `vs_target_percent` (NUMERIC) - Percentage difference from target (calculated)
+- `url` (TEXT, optional) - Product URL
+- `notes` (TEXT, optional) - Additional notes
+- `alert` (TEXT, optional) - Alert message if under target threshold
+- `created_at` (TIMESTAMP) - Record creation time
+- `updated_at` (TIMESTAMP) - Last update time
+
+## Automatic Calculations
+The database automatically calculates:
+- `total_dkk` = `price_dkk` + `shipping_dkk`
+- `vs_target_dkk` = `total_dkk` - `target_dkk`
+- `vs_target_percent` = (`total_dkk` - `target_dkk`) / `target_dkk`
+- `alert` = Set if under target by ≥15% or ≥200 DKK
+
 ## Error Handling
 The API returns standard HTTP status codes:
 - 200: Success
@@ -175,12 +248,14 @@ Error responses include a JSON object with an error message:
 ```
 
 ## Rate Limiting
-No specific rate limits are enforced, but please be reasonable with request frequency.
+No rate limits are enforced. All data is publicly accessible.
 
-## Notes for ChatGPT Agent
-1. Always include both `Authorization` and `apikey` headers
+## Notes for ChatGPT/AI Agent Integration
+1. **No authentication required** - All endpoints are publicly accessible
 2. Use the exact store names listed above
 3. Prices should be in Danish Kroner (DKK)
 4. Date format should be YYYY-MM-DD
-5. Always calculate total_dkk as price_dkk + shipping_dkk (this is done automatically by the API)
+5. The `total_dkk`, `vs_target_dkk`, `vs_target_percent`, and `alert` fields are automatically calculated
 6. URL should be a direct link to the product page
+7. For best performance, use the Supabase JavaScript client directly rather than the edge function
+8. All database operations (SELECT, INSERT, UPDATE, DELETE) are allowed without authentication
