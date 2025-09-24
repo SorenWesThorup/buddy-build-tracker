@@ -143,10 +143,10 @@ const Index = () => {
                                  </p>
                                </div>
                              </div>
-                             <div className="text-right">
-                               <p className="font-bold text-primary">
-                                 {comp.price_dkk} DKK
-                               </p>
+                              <div className="text-right">
+                                <p className="font-bold text-primary">
+                                  {comp.price_dkk.toLocaleString()} DKK
+                                </p>
                                <Badge variant="secondary" className="text-blue-600">
                                  PC Part Picker
                                </Badge>
@@ -219,7 +219,7 @@ const Index = () => {
                                     <span className="text-sm">{comp.model}</span>
                                   </TableCell>
                                   <TableCell className="text-muted-foreground">{comp.store}</TableCell>
-                                  <TableCell className="text-right font-semibold">{comp.price_dkk} DKK</TableCell>
+                                  <TableCell className="text-right font-semibold">{comp.price_dkk.toLocaleString()} DKK</TableCell>
                                   <TableCell className="text-center">
                                     {comp.url ? (
                                       <a href={comp.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 transition-colors">
