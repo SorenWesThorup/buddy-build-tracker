@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, AlertCircle, Wrench, Zap, Monitor, Home } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Navigation } from '@/components/Navigation';
 
 const BuildGuide = () => {
   const buildSteps = [
@@ -104,28 +105,7 @@ const BuildGuide = () => {
         <div className="absolute bottom-32 left-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{animationDelay: "3s"}}></div>
       </div>
 
-      <header className="border-b border-primary/20 backdrop-blur-sm bg-background/80">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <Monitor className="h-8 w-8 text-primary animate-pulse-glow" />
-                <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">PC Byggevejledning</h1>
-                <p className="text-muted-foreground text-sm">Trin for trin guide til dit gaming setup</p>
-              </div>
-            </div>
-            <Link to="/dashboard">
-              <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
-                <Home className="mr-2 h-4 w-4" />
-                Tilbage til Dashboard
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <Navigation />
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

@@ -6,13 +6,14 @@ import { TrendingDown, TrendingUp, Cpu, HardDrive, Zap, Wifi, Home, Gamepad2, Mo
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 import { usePCPartPicker } from '@/hooks/usePCPartPicker';
+import { Navigation } from '@/components/Navigation';
 
 const Index = () => {
   const { components, isLoading, error, totalPrice, partPickerUrl } = usePCPartPicker();
 
-  // Calculate metrics for PC Part Picker data
+  // Calculate metrics for PC Part Picker data - updated for 4500 DKK budget
   const totalCurrent = totalPrice;
-  const totalTarget = 9000; // Estimated target for the PC Part Picker build
+  const totalTarget = 4500; // 4500 DKK budget for the gaming PC
   const savings = totalTarget - totalCurrent;
   const alertComponents = []; // PC Part Picker doesn't have alert system
 
@@ -24,39 +25,7 @@ const Index = () => {
         <div className="absolute bottom-32 left-20 w-80 h-80 bg-accent/5 rounded-full blur-3xl animate-float" style={{animationDelay: "3s"}}></div>
       </div>
 
-      <header className="border-b border-primary/20 backdrop-blur-sm bg-background/80">
-        <div className="container mx-auto px-4 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="relative">
-                  <Monitor className="h-8 w-8 text-primary animate-pulse-glow" />
-                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-lg animate-pulse"></div>
-                </div>
-                <div>
-                  <h1 className="text-3xl font-bold bg-gradient-primary bg-clip-text text-transparent">PC Bygge Dashboard</h1>
-                  <p className="text-muted-foreground text-sm">Gaming PC til Minecraft & Fortnite</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <a 
-                  href={partPickerUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors text-sm font-medium"
-                >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  View on PC Part Picker
-                </a>
-                <Link to="/">
-                  <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
-                    <Home className="mr-2 h-4 w-4" />
-                    Tilbage til forsiden
-                  </Button>
-                </Link>
-              </div>
-            </div>
-        </div>
-      </header>
+      <Navigation partPickerUrl={partPickerUrl} />
 
       <main className="container mx-auto px-4 py-8">
         <Tabs defaultValue="dashboard" className="space-y-6">
