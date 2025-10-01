@@ -1,3 +1,5 @@
+import { supabase } from '@/integrations/supabase/client';
+
 // PC Part Picker service for fetching component data
 export interface PCPartPickerComponent {
   id: string;
@@ -12,51 +14,57 @@ export interface PCPartPickerComponent {
 export class PCPartPickerService {
   private static readonly PC_PART_PICKER_URL = 'https://dk.pcpartpicker.com/list/D3VFjn';
   
-  // Fetch real-time prices from PC Part Picker
+  // Fetch real-time prices from Lovable Cloud backend
   static async fetchComponents(): Promise<PCPartPickerComponent[]> {
     try {
-      // Use the Supabase edge function to get real prices
-      const response = await fetch('/api/pc-price-api/components');
+      // Use the Supabase client to call the edge function
+      const { data, error } = await supabase.functions.invoke('pc-price-api', {
+        body: { action: 'get_components' }
+      });
       
-      if (!response.ok) {
-        // Fallback to scraping PC Part Picker page
-        return await this.scrapePCPartPicker();
+      if (error) throw error;
+      
+      if (data && Array.isArray(data)) {
+        return this.transformSupabaseData(data);
       }
       
-      const data = await response.json();
-      return this.transformSupabaseData(data);
+      // Fallback to direct database query
+      return await this.fetchFromDatabase();
     } catch (error) {
       console.error('Error fetching components:', error);
-      // Fallback to scraping
-      return await this.scrapePCPartPicker();
+      return await this.fetchFromDatabase();
     }
   }
 
-  // Scrape PC Part Picker page for current prices
-  private static async scrapePCPartPicker(): Promise<PCPartPickerComponent[]> {
+  // Fetch directly from database as fallback
+  private static async fetchFromDatabase(): Promise<PCPartPickerComponent[]> {
     try {
-      // Since we can't directly scrape from frontend, we'll use a proxy service
-      // or fall back to updated mock data with current prices
-      const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(this.PC_PART_PICKER_URL)}`);
-      const data = await response.json();
+      const { data, error } = await supabase
+        .from('pc_components' as any)
+        .select(`
+          *,
+          price_entries!inner(
+            date,
+            model,
+            store,
+            price_dkk,
+            shipping_dkk,
+            total_dkk,
+            url,
+            notes
+          )
+        `)
+        .order('date', { foreignTable: 'price_entries', ascending: false });
+
+      if (error) throw error;
       
-      // Parse the HTML content to extract component data
-      return this.parsePartPickerHTML(data.contents);
+      return this.transformSupabaseData(data || []);
     } catch (error) {
-      console.error('Error scraping PC Part Picker:', error);
-      // Return updated prices (you would normally get these from actual store APIs)
+      console.error('Error fetching from database:', error);
       return this.getFallbackComponents();
     }
   }
 
-  // Parse PC Part Picker HTML to extract component data
-  private static parsePartPickerHTML(html: string): PCPartPickerComponent[] {
-    // This is a simplified parser - in a real implementation you'd use a proper HTML parser
-    const components: PCPartPickerComponent[] = [];
-    
-    // For now, return updated components with more accurate pricing
-    return this.getFallbackComponents();
-  }
 
   // Get updated component data with current market prices
   private static getFallbackComponents(): PCPartPickerComponent[] {

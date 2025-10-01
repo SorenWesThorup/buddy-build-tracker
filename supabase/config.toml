@@ -1,1 +1,4 @@
 project_id = "dydosyheairmgbxdlnpk"
+
+[functions.pc-price-api]
+verify_jwt = false

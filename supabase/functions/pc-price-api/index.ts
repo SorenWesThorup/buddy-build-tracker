@@ -20,6 +20,38 @@ serve(async (req) => {
 
     const url = new URL(req.url)
     const path = url.pathname.replace('/pc-price-api', '')
+    
+    // Handle POST requests with action in body
+    if (req.method === 'POST') {
+      const body = await req.json()
+      
+      // Get all components
+      if (body.action === 'get_components') {
+        const { data: components, error } = await supabaseClient
+          .from('pc_components')
+          .select(`
+            *,
+            price_entries!inner(
+              date,
+              model,
+              store,
+              price_dkk,
+              shipping_dkk,
+              total_dkk,
+              url,
+              notes
+            )
+          `)
+          .order('date', { foreignTable: 'price_entries', ascending: false })
+
+        if (error) throw error
+
+        return new Response(
+          JSON.stringify(components),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+    }
 
     // GET /components - Get all components with latest prices
     if (req.method === 'GET' && path === '/components') {
